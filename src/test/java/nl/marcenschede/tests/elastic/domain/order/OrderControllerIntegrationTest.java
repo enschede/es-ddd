@@ -63,6 +63,19 @@ public class OrderControllerIntegrationTest {
         assertThat(events.size(), is(2));
     }
 
+    @Test
+    public void shouldBeFoundById() throws IOException, IdNotNullException, IdEqualsNullException {
+
+        Order kitty = new Order();
+        kitty.setNaam("Kitty Enschede");
+        kitty = orderRepository.create(kitty);
+
+        Order actualOrder = orderRepository.findById(kitty.getId());
+
+        assertThat(actualOrder, notNullValue());
+        assertThat(actualOrder.getNaam(), is("Kitty Enschede"));
+    }
+
     @After
     public void after() throws ExecutionException, InterruptedException {
         orderRepository.resetIndex();

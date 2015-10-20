@@ -94,6 +94,8 @@ public abstract class ElasticRepository<T extends DomainEntity> implements ESR<T
         byte[] responseSourceAsBytes = response.getSourceAsBytes();
 
         T result = objectMapper.readValue(responseSourceAsBytes, (Class<T>) getType().getClazz());
+        beanFactory.autowireBean(result);
+
         return result;
     }
 
