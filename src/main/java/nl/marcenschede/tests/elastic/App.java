@@ -1,8 +1,8 @@
-import nl.marcenschede.tests.elastic.order.Order;
+package nl.marcenschede.tests.elastic;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 
 @EnableAutoConfiguration
 @ComponentScan(basePackageClasses = App.class)

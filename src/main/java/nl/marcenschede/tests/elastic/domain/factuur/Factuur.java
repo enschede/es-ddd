@@ -1,4 +1,4 @@
-package nl.marcenschede.tests.elastic;
+package nl.marcenschede.tests.elastic.domain.factuur;
 
 import nl.marcenschede.tests.elastic.base.domains.DomainEntity;
 import nl.marcenschede.tests.elastic.base.domains.DomainEntityType;

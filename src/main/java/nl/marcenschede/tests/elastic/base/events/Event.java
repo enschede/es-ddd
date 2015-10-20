@@ -1,27 +1,38 @@
 package nl.marcenschede.tests.elastic.base.events;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.Properties;
 
-/**
- * Created by marc on 19/10/15.
- */
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "eventClass")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = DomainEntityEvent.class, name = "DomainEntityEvent"),
+        @JsonSubTypes.Type(value = ApplicatonEvent.class, name = "ApplicatonEvent")})
 public abstract class Event implements Serializable {
 
     private LocalDateTime timestamp;
     private String user;
-    private EventClass eventClass;
+    private String entityId;
+    private String entityClass;
     private Properties properties;
 
-    public Event(EventClass eventClass) {
+    public Event() {
+    }
+
+    public Event(String entityId, String domainEntityType) {
         timestamp = LocalDateTime.now();
         user = "unknown";
-        this.eventClass = eventClass;
         this.properties = new Properties();
+
+        this.entityId = entityId;
+        this.entityClass = domainEntityType;
+
     }
 
     public LocalDateTime getTimestamp() {
@@ -32,11 +43,26 @@ public abstract class Event implements Serializable {
         return user;
     }
 
-    public EventClass getEventClass() {
-        return eventClass;
-    }
-
     public Properties getProperties() {
         return properties;
+    }
+
+    public String getEntityId() {
+        return entityId;
+    }
+
+    public String getEntityClass() {
+        return entityClass;
+    }
+
+    @Override
+    public String toString() {
+        return "Event{" +
+                "timestamp=" + timestamp +
+                ", user='" + user + '\'' +
+                ", entityId='" + entityId + '\'' +
+                ", entityClass='" + entityClass + '\'' +
+                ", properties=" + properties +
+                '}';
     }
 }
