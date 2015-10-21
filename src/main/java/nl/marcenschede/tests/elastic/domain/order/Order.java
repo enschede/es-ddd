@@ -1,15 +1,15 @@
 package nl.marcenschede.tests.elastic.domain.order;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import nl.marcenschede.tests.elastic.base.domains.DomainEntity;
-import nl.marcenschede.tests.elastic.base.domains.DomainEntityType;
+import nl.marcenschede.tests.elastic.base.domains.AggregateBase;
+import nl.marcenschede.tests.elastic.base.domains.AggregateType;
 import nl.marcenschede.tests.elastic.base.events.Event;
-import nl.marcenschede.tests.elastic.domain.order.repository.OrderRepositoryImpl;
+import nl.marcenschede.tests.elastic.infra.repository.OrderRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class Order extends DomainEntity {
+public class Order extends AggregateBase {
 
     @Autowired
     private OrderRepositoryImpl orderRepositoryImpl;
@@ -30,8 +30,8 @@ public class Order extends DomainEntity {
     }
 
     @Override
-    public DomainEntityType getDomainEntityType() {
-        return DomainEntityType.ORDER;
+    public AggregateType getDomainEntityType() {
+        return AggregateType.ORDER;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class Order extends DomainEntity {
         return "Order{" +
                 "orderRepositoryImpl=" + orderRepositoryImpl +
                 ", naam='" + naam + '\'' +
-                ", domainEntity='" + super.toString() + '\'' +
+                ", super='" + super.toString() + '\'' +
                 '}';
     }
 }

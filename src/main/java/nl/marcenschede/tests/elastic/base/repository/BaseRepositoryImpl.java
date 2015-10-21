@@ -3,10 +3,10 @@ package nl.marcenschede.tests.elastic.base.repository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.marcenschede.tests.elastic.ESConstants;
-import nl.marcenschede.tests.elastic.base.domains.DomainEntity;
-import nl.marcenschede.tests.elastic.base.domains.DomainEntityType;
-import nl.marcenschede.tests.elastic.base.events.DomainEntityEvent;
-import nl.marcenschede.tests.elastic.base.events.DomainEntityEventType;
+import nl.marcenschede.tests.elastic.base.domains.AggregateBase;
+import nl.marcenschede.tests.elastic.base.domains.AggregateType;
+import nl.marcenschede.tests.elastic.base.events.AggregateEvent;
+import nl.marcenschede.tests.elastic.base.events.AggregateEventType;
 import nl.marcenschede.tests.elastic.base.events.Event;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -26,7 +26,7 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-public abstract class ElasticRepository<T extends DomainEntity> implements ESR<T> {
+public abstract class BaseRepositoryImpl<T extends AggregateBase> implements BaseRepository<T> {
 
     static final boolean ELASTIC_SEARCH_REFRESH = true;
 
@@ -52,8 +52,8 @@ public abstract class ElasticRepository<T extends DomainEntity> implements ESR<T
         byte[] entityAsByteStreamForUpdate = objectMapper.writeValueAsBytes(t);
         client.prepareUpdate(index, type, t.getId()).setDoc(entityAsByteStreamForUpdate).setRefresh(ELASTIC_SEARCH_REFRESH).get();
 
-        DomainEntityEvent domainEntityEvent = new DomainEntityEvent(DomainEntityEventType.CREATE, t, "");
-        byte[] eventAsByteStream = objectMapper.writeValueAsBytes(domainEntityEvent);
+        AggregateEvent aggregateEvent = new AggregateEvent(AggregateEventType.CREATE, t, "");
+        byte[] eventAsByteStream = objectMapper.writeValueAsBytes(aggregateEvent);
         client.prepareIndex(index, "event").setSource(eventAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get().getId();
 
         return t;
@@ -73,8 +73,8 @@ public abstract class ElasticRepository<T extends DomainEntity> implements ESR<T
 
         client.prepareUpdate(index, type, t.getId()).setDoc(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
 
-        DomainEntityEvent domainEntityEvent = new DomainEntityEvent(DomainEntityEventType.UPDATE, t, "");
-        byte[] eventAsByteStream = objectMapper.writeValueAsBytes(domainEntityEvent);
+        AggregateEvent aggregateEvent = new AggregateEvent(AggregateEventType.UPDATE, t, "");
+        byte[] eventAsByteStream = objectMapper.writeValueAsBytes(aggregateEvent);
         client.prepareIndex(index, "event").setSource(eventAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get().getId();
 
         return t;
@@ -90,7 +90,7 @@ public abstract class ElasticRepository<T extends DomainEntity> implements ESR<T
 
         String index = ESConstants.ES_INDEX_ALIAS_NAME;
 
-        GetResponse response = client.prepareGet(index, DomainEntityType.ORDER.getType(), id).get();
+        GetResponse response = client.prepareGet(index, AggregateType.ORDER.getType(), id).get();
         byte[] responseSourceAsBytes = response.getSourceAsBytes();
 
         T result = objectMapper.readValue(responseSourceAsBytes, (Class<T>) getType().getClazz());
@@ -190,11 +190,6 @@ public abstract class ElasticRepository<T extends DomainEntity> implements ESR<T
     }
 
     @Override
-    public Client getClient() {
-        return client;
-    }
-
-    @Override
     public void resetIndex() throws ExecutionException, InterruptedException {
         DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest();
 
@@ -203,5 +198,5 @@ public abstract class ElasticRepository<T extends DomainEntity> implements ESR<T
         client.admin().indices().delete(deleteIndexRequest).get();
     }
 
-    protected abstract DomainEntityType getType();
+    protected abstract AggregateType getType();
 }

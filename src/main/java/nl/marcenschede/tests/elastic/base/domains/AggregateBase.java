@@ -11,11 +11,11 @@ import java.io.Serializable;
 @JsonTypeInfo(
         use = JsonTypeInfo.Id.NAME,
         include = JsonTypeInfo.As.PROPERTY,
-        property = "domainClass")
+        property = "aggregatetype")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = Order.class, name = "order"),
         @JsonSubTypes.Type(value = Factuur.class, name = "factuur")})
-public abstract class DomainEntity implements Serializable {
+public abstract class AggregateBase implements Serializable {
 
     private String id;
 
@@ -28,11 +28,11 @@ public abstract class DomainEntity implements Serializable {
     }
 
     @JsonIgnore
-    public abstract DomainEntityType getDomainEntityType();
+    public abstract AggregateType getDomainEntityType();
 
     @Override
     public String toString() {
-        return "DomainEntity{" +
+        return "AggregateBase{" +
                 "id='" + id + '\'' +
                 '}';
     }

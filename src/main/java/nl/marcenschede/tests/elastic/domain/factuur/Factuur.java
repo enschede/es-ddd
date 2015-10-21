@@ -1,14 +1,12 @@
 package nl.marcenschede.tests.elastic.domain.factuur;
 
-import nl.marcenschede.tests.elastic.base.domains.DomainEntity;
-import nl.marcenschede.tests.elastic.base.domains.DomainEntityType;
+import nl.marcenschede.tests.elastic.base.domains.AggregateBase;
+import nl.marcenschede.tests.elastic.base.domains.AggregateType;
 
-public class Factuur extends DomainEntity {
-
-
+public class Factuur extends AggregateBase {
 
     @Override
-    public DomainEntityType getDomainEntityType() {
-        return DomainEntityType.FACTUUR;
+    public AggregateType getDomainEntityType() {
+        return AggregateType.FACTUUR;
     }
 }

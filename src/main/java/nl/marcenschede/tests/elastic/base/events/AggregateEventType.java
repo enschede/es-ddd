@@ -1,6 +1,6 @@
 package nl.marcenschede.tests.elastic.base.events;
 
-public enum DomainEntityEventType {
+public enum AggregateEventType {
 
     CREATE, UPDATE, DELETE;
 }

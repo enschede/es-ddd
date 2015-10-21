@@ -1,12 +1,12 @@
 package nl.marcenschede.tests.elastic.base.repository;
 
-import nl.marcenschede.tests.elastic.base.domains.DomainEntity;
+import nl.marcenschede.tests.elastic.base.domains.AggregateBase;
 
 public class IdEqualsNullException extends Throwable {
 
-    private DomainEntity domainEntity;
+    private AggregateBase aggregateBase;
 
-    public <T extends DomainEntity> IdEqualsNullException(T t) {
-        this.domainEntity = t;
+    public <T extends AggregateBase> IdEqualsNullException(T t) {
+        this.aggregateBase = t;
     }
 }

@@ -12,8 +12,8 @@ import java.util.Properties;
         include = JsonTypeInfo.As.PROPERTY,
         property = "eventClass")
 @JsonSubTypes({
-        @JsonSubTypes.Type(value = DomainEntityEvent.class, name = "DomainEntityEvent"),
-        @JsonSubTypes.Type(value = ApplicatonEvent.class, name = "ApplicatonEvent")})
+        @JsonSubTypes.Type(value = AggregateEvent.class, name = "AggregateEvent"),
+        @JsonSubTypes.Type(value = ApplicationEvent.class, name = "ApplicationEvent")})
 public abstract class Event implements Serializable {
 
     private LocalDateTime timestamp;
