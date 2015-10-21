@@ -24,4 +24,13 @@ public class ApplicationEvent extends Event {
         this.processEventType = processEventType;
         this.reason = reason;
     }
+
+    @Override
+    public String toString() {
+        return "ApplicationEvent{" +
+                "processEventType=" + processEventType +
+                ", reason='" + reason + '\'' +
+                ", super='" + super.toString() + '\'' +
+                '}';
+    }
 }

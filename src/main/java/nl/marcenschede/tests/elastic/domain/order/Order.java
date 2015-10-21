@@ -7,6 +7,7 @@ import nl.marcenschede.tests.elastic.base.events.Event;
 import nl.marcenschede.tests.elastic.infra.repository.OrderRepositoryImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Order extends AggregateBase {
@@ -15,6 +16,7 @@ public class Order extends AggregateBase {
     private OrderRepositoryImpl orderRepositoryImpl;
 
     private String naam;
+    private List<OrderLine> orderLines = new ArrayList<>();
 
     public String getNaam() {
         return naam;
@@ -22,6 +24,10 @@ public class Order extends AggregateBase {
 
     public void setNaam(String naam) {
         this.naam = naam;
+    }
+
+    public List<OrderLine> getOrderLines() {
+        return orderLines;
     }
 
     @JsonIgnore

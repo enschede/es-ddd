@@ -8,7 +8,7 @@ import nl.marcenschede.tests.elastic.base.events.ProcessEventType;
 import nl.marcenschede.tests.elastic.base.repository.EventRepository;
 import nl.marcenschede.tests.elastic.base.repository.IdEqualsNullException;
 import nl.marcenschede.tests.elastic.base.repository.IdNotNullException;
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,17 +32,23 @@ public class OrderControllerIntegrationTest {
     @Autowired
     private EventRepository eventRepository;
 
+    @Autowired
+    private OrderFactory orderFactory;
+
+    @Before
+    public void before() throws ExecutionException, InterruptedException {
+        orderRepository.resetIndex();
+    }
+
     @Test
     public void shouldCreateTwoEntities() throws IOException, IdNotNullException, IdEqualsNullException {
 
-        Order kitty = new Order();
-        kitty.setNaam("Kitty Enschede");
+        Order kitty = orderFactory.newOrder("Kitty Enschede");
         kitty = orderRepository.create(kitty);
 
         assertThat(kitty.getId(), notNullValue());
 
-        Order marc = new Order();
-        marc.setNaam("Marc Enschede");
+        Order marc = orderFactory.newOrder("Marc Enschede");
         orderRepository.create(marc);
 
         assertThat(marc.getId(), notNullValue());
@@ -57,8 +63,7 @@ public class OrderControllerIntegrationTest {
     @Test
     public void shouldUpdateAggregate() throws JsonProcessingException, IdNotNullException, IdEqualsNullException {
 
-        Order kitty = new Order();
-        kitty.setNaam("Kitty Enschede");
+        Order kitty = orderFactory.newOrder("Kitty de Jonge");
         kitty = orderRepository.create(kitty);
 
         kitty.setNaam("Kitty Enschede");
@@ -74,8 +79,7 @@ public class OrderControllerIntegrationTest {
     @Test
     public void shouldCreateThreeEvents() throws JsonProcessingException, IdNotNullException, IdEqualsNullException {
 
-        Order kitty = new Order();
-        kitty.setNaam("Kitty Enschede");
+        Order kitty = orderFactory.newOrder("Kitty de Jonge");
         kitty = orderRepository.create(kitty);      // Create first event
 
         kitty.setNaam("Kitty Enschede");
@@ -94,19 +98,13 @@ public class OrderControllerIntegrationTest {
     @Test
     public void shouldBeFoundById() throws IOException, IdNotNullException, IdEqualsNullException {
 
-        Order kitty = new Order();
-        kitty.setNaam("Kitty Enschede");
+        Order kitty = orderFactory.newOrder("Kitty Enschede");
         kitty = orderRepository.create(kitty);
 
         Order actualOrder = orderRepository.findById(kitty.getId());
 
         assertThat(actualOrder, notNullValue());
         assertThat(actualOrder.getNaam(), is("Kitty Enschede"));
-    }
-
-    @After
-    public void after() throws ExecutionException, InterruptedException {
-        orderRepository.resetIndex();
     }
 
 }

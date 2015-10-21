@@ -195,7 +195,11 @@ public abstract class BaseRepositoryImpl<T extends AggregateBase> implements Bas
 
         deleteIndexRequest.indices(ESConstants.ES_INDEX_ALIAS_NAME);
 
-        client.admin().indices().delete(deleteIndexRequest).get();
+        try {
+            client.admin().indices().delete(deleteIndexRequest).get();
+        } catch (ExecutionException ee) {
+
+        }
     }
 
     protected abstract AggregateType getType();

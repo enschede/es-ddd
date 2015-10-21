@@ -19,20 +19,20 @@ public class OrderController {
     @Autowired
     private OrderRepository orderRepository;
 
+    @Autowired
+    private OrderFactory orderFactory;
+
     @RequestMapping("/json")
     @ResponseBody
     public String storeOrder() throws IOException, IdNotNullException, IdEqualsNullException, ExecutionException, InterruptedException {
 
-        Order kitty = new Order();
-        kitty.setNaam("Kitty de Jonge");
+        Order kitty = orderFactory.newOrder("Kitty de Jonge");
         kitty = orderRepository.create(kitty);
 
-        Order marc = new Order();
-        marc.setNaam("Marc Enschede");
+        Order marc = orderFactory.newOrder("Marc Enschede");
         orderRepository.create(marc);
 
-        Order ties = new Order();
-        ties.setNaam("Ties Wonink");
+        Order ties = orderFactory.newOrder("Ties Wonink");
         orderRepository.create(ties);
 
         kitty.setNaam("Kitty Enschede");
