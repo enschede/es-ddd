@@ -2,6 +2,7 @@ package nl.marcenschede.tests.elastic.domain.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import nl.marcenschede.tests.elastic.App;
+import nl.marcenschede.tests.elastic.base.command.Invoker;
 import nl.marcenschede.tests.elastic.base.events.ApplicationEvent;
 import nl.marcenschede.tests.elastic.base.events.Event;
 import nl.marcenschede.tests.elastic.base.events.ProcessEventType;
@@ -17,6 +18,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import static org.hamcrest.Matchers.*;
@@ -107,4 +109,20 @@ public class OrderControllerIntegrationTest {
         assertThat(actualOrder.getNaam(), is("Kitty Enschede"));
     }
 
+    @Autowired
+    private Invoker invoker;
+
+    @Test
+    public void testExecuteCommand() throws Exception {
+
+        Offer offer = new Offer("Marc");
+
+        OrderFromOfferCommand command = new OrderFromOfferCommand(offer);
+
+        invoker.executeCommand(command);
+
+        Properties properties = new Properties();
+        properties.setProperty("naam", "Marc");
+        assertThat(orderRepository.findByCriteria(properties).size(), is(1));
+    }
 }

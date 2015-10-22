@@ -2,7 +2,7 @@ package nl.marcenschede.tests.elastic.base.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.marcenschede.tests.elastic.ESConstants;
+import nl.marcenschede.tests.elastic.Configurator;
 import nl.marcenschede.tests.elastic.base.domains.AggregateBase;
 import nl.marcenschede.tests.elastic.base.domains.AggregateType;
 import nl.marcenschede.tests.elastic.base.events.AggregateEvent;
@@ -43,7 +43,7 @@ public abstract class BaseRepositoryImpl<T extends AggregateBase> implements Bas
         throwExceptionIfIdNotNull(t);
 
         String type = t.getDomainEntityType().getType();
-        String index = ESConstants.ES_INDEX_ALIAS_NAME;
+        String index = Configurator.INDEX_NAME;
         byte[] entityAsByteStream = objectMapper.writeValueAsBytes(t);
 
         IndexRequestBuilder result = client.prepareIndex(index, type).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH);
@@ -68,7 +68,7 @@ public abstract class BaseRepositoryImpl<T extends AggregateBase> implements Bas
         throwExceptionIfIdEqualsNull(t);
 
         String type = t.getDomainEntityType().getType();
-        String index = ESConstants.ES_INDEX_ALIAS_NAME;
+        String index = Configurator.INDEX_NAME;
         byte[] entityAsByteStream = objectMapper.writeValueAsBytes(t);
 
         client.prepareUpdate(index, type, t.getId()).setDoc(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
@@ -88,7 +88,7 @@ public abstract class BaseRepositoryImpl<T extends AggregateBase> implements Bas
     public T findById(String id) throws IOException, IdEqualsNullException {
         throwExceptionIfNull(id);
 
-        String index = ESConstants.ES_INDEX_ALIAS_NAME;
+        String index = Configurator.INDEX_NAME;
 
         GetResponse response = client.prepareGet(index, AggregateType.ORDER.getType(), id).get();
         byte[] responseSourceAsBytes = response.getSourceAsBytes();
@@ -193,7 +193,7 @@ public abstract class BaseRepositoryImpl<T extends AggregateBase> implements Bas
     public void resetIndex() throws ExecutionException, InterruptedException {
         DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest();
 
-        deleteIndexRequest.indices(ESConstants.ES_INDEX_ALIAS_NAME);
+        deleteIndexRequest.indices(Configurator.INDEX_NAME);
 
         try {
             client.admin().indices().delete(deleteIndexRequest).get();
