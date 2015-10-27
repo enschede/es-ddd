@@ -59,7 +59,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>nl.marcenschede.tests.elastic.App.nl.marcenschede.tests.elastic.App</mainClass>
+                            <mainClass>nl.marcenschede.tests.App.nl.marcenschede.tests.App</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

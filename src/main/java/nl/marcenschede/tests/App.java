@@ -1,4 +1,4 @@
-package nl.marcenschede.tests.elastic;
+package nl.marcenschede.tests;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;

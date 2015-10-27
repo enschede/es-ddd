@@ -1,7 +1,7 @@
 package nl.marcenschede.tests.elastic.domain.order;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import nl.marcenschede.tests.elastic.App;
+import nl.marcenschede.tests.App;
 import nl.marcenschede.tests.elastic.base.command.Invoker;
 import nl.marcenschede.tests.elastic.base.events.ApplicationEvent;
 import nl.marcenschede.tests.elastic.base.events.Event;
