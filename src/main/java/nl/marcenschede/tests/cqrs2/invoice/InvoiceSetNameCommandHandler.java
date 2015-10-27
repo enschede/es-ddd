@@ -1,5 +1,7 @@
-package nl.marcenschede.tests.cqrs2;
+package nl.marcenschede.tests.cqrs2.invoice;
 
+import nl.marcenschede.tests.cqrs2.base.Command;
+import nl.marcenschede.tests.cqrs2.base.CommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

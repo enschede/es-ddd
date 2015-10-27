@@ -1,5 +1,9 @@
-package nl.marcenschede.tests.cqrs2;
+package nl.marcenschede.tests.cqrs2.base;
 
+import nl.marcenschede.tests.cqrs2.invoice.CreateCommandCommandHandler;
+import nl.marcenschede.tests.cqrs2.invoice.CreateInvoiceCommand;
+import nl.marcenschede.tests.cqrs2.invoice.InvoiceSetNameCommand;
+import nl.marcenschede.tests.cqrs2.invoice.InvoiceSetNameCommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

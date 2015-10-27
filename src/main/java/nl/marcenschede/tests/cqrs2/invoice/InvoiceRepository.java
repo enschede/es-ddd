@@ -1,5 +1,6 @@
-package nl.marcenschede.tests.cqrs2;
+package nl.marcenschede.tests.cqrs2.invoice;
 
+import nl.marcenschede.tests.cqrs2.base.Repository;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;

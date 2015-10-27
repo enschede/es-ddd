@@ -1,4 +1,4 @@
-package nl.marcenschede.tests.cqrs2;
+package nl.marcenschede.tests.cqrs2.base;
 
 import java.util.LinkedList;
 import java.util.List;

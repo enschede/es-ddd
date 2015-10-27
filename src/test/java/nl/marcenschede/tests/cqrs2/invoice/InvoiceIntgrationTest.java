@@ -1,6 +1,7 @@
-package nl.marcenschede.tests.cqrs2;
+package nl.marcenschede.tests.cqrs2.invoice;
 
 import nl.marcenschede.tests.App;
+import nl.marcenschede.tests.cqrs2.base.Bus;
 import org.hamcrest.core.Is;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +15,7 @@ import static org.junit.Assert.assertThat;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = App.class)
-public class BusTest {
+public class InvoiceIntgrationTest {
 
     @Autowired
     private Bus bus;

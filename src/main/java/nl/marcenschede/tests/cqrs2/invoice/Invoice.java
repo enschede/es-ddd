@@ -1,4 +1,7 @@
-package nl.marcenschede.tests.cqrs2;
+package nl.marcenschede.tests.cqrs2.invoice;
+
+import nl.marcenschede.tests.cqrs2.base.AggregateRoot;
+import nl.marcenschede.tests.cqrs2.base.Event;
 
 import java.util.UUID;
 
