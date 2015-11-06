@@ -36,6 +36,8 @@ public class InvoiceIntgrationTest {
         Invoice actualInvoice = invoiceRepository.loadFromHistory(expectedUuid);
 
         assertThat(actualInvoice.getNaam(), Is.is("Marc Enschede"));
+
+//        while(true);
     }
 
 

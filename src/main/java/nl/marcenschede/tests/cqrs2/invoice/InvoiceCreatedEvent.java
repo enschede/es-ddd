@@ -7,10 +7,13 @@ import java.util.UUID;
 /**
  * Created by marc on 27/10/15.
  */
-public class InvoiceCreatedEvent implements Event {
+public class InvoiceCreatedEvent extends Event {
 
     private UUID uuid;
     private String naam;
+
+    private InvoiceCreatedEvent() {
+    }
 
     public InvoiceCreatedEvent(UUID uuid, String naam) {
         this.uuid = uuid;
