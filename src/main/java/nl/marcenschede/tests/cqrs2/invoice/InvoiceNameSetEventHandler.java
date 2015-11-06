@@ -1,5 +1,6 @@
 package nl.marcenschede.tests.cqrs2.invoice;
 
+import nl.marcenschede.tests.cqrs2.base.Bus;
 import nl.marcenschede.tests.cqrs2.base.Event;
 import nl.marcenschede.tests.cqrs2.base.EventHandler;
 
@@ -8,7 +9,7 @@ import nl.marcenschede.tests.cqrs2.base.EventHandler;
  */
 public class InvoiceNameSetEventHandler implements EventHandler {
     @Override
-    public void process(Event event) {
+    public void process(Event event, Bus bus) {
 
     }
 }

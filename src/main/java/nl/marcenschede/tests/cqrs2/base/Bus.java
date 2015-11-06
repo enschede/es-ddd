@@ -15,7 +15,7 @@ public class Bus {
     @Autowired
     private EventHandlerConfigurator eventHandlerConfigurator;
 
-    private List<Event> scheduleEvents = new ArrayList<>();
+    private List<Event> scheduledEvents = new ArrayList<>();
 
     public void process(Command command) {
         CommandHandler commandHandler = commandHandlerConfigurator.getCommandHandler(command);
@@ -26,16 +26,16 @@ public class Bus {
     }
 
     private void processScheduledEvents() {
-        scheduleEvents.stream().forEach(event -> processScheduledEvent(event));
-        scheduleEvents.clear();
+        scheduledEvents.stream().forEach(event -> processScheduledEvent(event));
+        scheduledEvents.clear();
     }
 
     private void processScheduledEvent(Event event) {
         List<? extends EventHandler> eventHandlers = eventHandlerConfigurator.getEventHandler(event);
-        eventHandlers.stream().forEach(eventHandler -> eventHandler.process(event));
+        eventHandlers.stream().forEach(eventHandler -> eventHandler.process(event, this));
     }
 
     public void scheduleEventProcessing(List<Event> uncommittedChanges) {
-        scheduleEvents.addAll(uncommittedChanges);
+        scheduledEvents.addAll(uncommittedChanges);
     }
 }

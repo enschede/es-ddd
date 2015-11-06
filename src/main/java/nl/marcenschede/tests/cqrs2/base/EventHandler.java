@@ -5,5 +5,5 @@ package nl.marcenschede.tests.cqrs2.base;
  */
 public interface EventHandler {
 
-    public void process(Event event);
+    public void process(Event event, Bus bus);
 }

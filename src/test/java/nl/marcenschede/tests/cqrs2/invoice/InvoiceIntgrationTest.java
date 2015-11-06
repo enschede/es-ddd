@@ -2,6 +2,9 @@ package nl.marcenschede.tests.cqrs2.invoice;
 
 import nl.marcenschede.tests.App;
 import nl.marcenschede.tests.cqrs2.base.Bus;
+import nl.marcenschede.tests.cqrs2.invoice.invoicedetails.InvoiceDetails;
+import nl.marcenschede.tests.elastic.base.repository.IdEqualsNullException;
+import org.hamcrest.Matchers;
 import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -23,15 +27,18 @@ public class InvoiceIntgrationTest {
     private Bus bus;
 
     @Autowired
-    private InvoiceEventRepository invoiceRepository;
+    private InvoiceEventRepository invoiceEventRepository;
+
+    @Autowired
+    private InvoiceDtoRepository invoiceDtoRepository;
 
     @Before
     public void before() throws ExecutionException, InterruptedException {
-        invoiceRepository.deleteIndex();
+        invoiceEventRepository.deleteIndex();
     }
 
     @Test
-    public void shouldCreate() {
+    public void shouldCreate() throws IOException, IdEqualsNullException {
         UUID expectedUuid = UUID.randomUUID();
 
         CreateInvoiceCommand command = new CreateInvoiceCommand(expectedUuid, "Marc", "Order12345");
@@ -40,12 +47,16 @@ public class InvoiceIntgrationTest {
         InvoiceSetNameCommand cmd2 = new InvoiceSetNameCommand(expectedUuid, "Marc Enschede");
         bus.process(cmd2);
 
-        Invoice actualInvoice = invoiceRepository.loadFromHistory(expectedUuid);
+        Invoice actualInvoice = invoiceEventRepository.loadFromHistory(expectedUuid);
 
         assertThat(actualInvoice.getNaam(), Is.is("Marc Enschede"));
         assertThat(actualInvoice.getOrderRef(), Is.is("Order12345"));
 
-//        while(true);
+        InvoiceDetails dtoInvoice = invoiceDtoRepository.findById(expectedUuid.toString());
+
+        assertThat(dtoInvoice.getNaam(), Matchers.is("Marc"));
+
+        while(true);
     }
 
 

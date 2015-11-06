@@ -38,7 +38,7 @@ public abstract class EventRepository<T extends AggregateRoot> {
     private AutowireCapableBeanFactory beanFactory;
 
     @Autowired
-    private CqrsConfigurator cqrsConfigurator;
+    private Configurator configurator;
 
     public void storeEvent(T t) {
         UUID uuid = t.getUuid();
@@ -58,7 +58,7 @@ public abstract class EventRepository<T extends AggregateRoot> {
             e.printStackTrace();
         }
 
-        client.prepareIndex(cqrsConfigurator.getIndexName(), EVENT_TYPE_ID).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
+        client.prepareIndex(configurator.getIndexName(), EVENT_TYPE_ID).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
 
     }
 
@@ -90,7 +90,7 @@ public abstract class EventRepository<T extends AggregateRoot> {
                 .setSize(100)
                 .execute().actionGet();
 
-        GetResponse response = client.prepareGet(cqrsConfigurator.getIndexName(), EVENT_TYPE_ID, uuid.toString()).get();
+        GetResponse response = client.prepareGet(configurator.getIndexName(), EVENT_TYPE_ID, uuid.toString()).get();
 
         List<Event> results = new ArrayList<>();
 
@@ -127,25 +127,13 @@ public abstract class EventRepository<T extends AggregateRoot> {
     public void deleteIndex() {
         DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest();
 
-        deleteIndexRequest.indices(cqrsConfigurator.getIndexName());
+        deleteIndexRequest.indices(configurator.getIndexName());
 
         try {
             client.admin().indices().delete(deleteIndexRequest).get();
         } catch (ExecutionException | InterruptedException ee) {
         }
 
-    }
-
-    public void storeDto(DtoObject t) {
-        String type = t.getDtoEntityType();
-        byte[] entityAsByteStream = new byte[0];
-        try {
-            entityAsByteStream = objectMapper.writeValueAsBytes(t);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
-
-        client.prepareIndex(cqrsConfigurator.getIndexName(), type).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
     }
 
 }

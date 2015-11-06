@@ -8,9 +8,12 @@ import java.util.UUID;
  * Created by marc on 06/11/15.
  */
 public class InvoiceDetails implements DtoObject {
-    private final UUID uuid;
-    private final String naam;
-    private final String orderRef;
+    private UUID uuid;
+    private String naam;
+    private String orderRef;
+
+    private InvoiceDetails() {
+    }
 
     public InvoiceDetails(UUID uuid, String naam, String orderRef) {
         this.uuid = uuid;
@@ -28,10 +31,5 @@ public class InvoiceDetails implements DtoObject {
 
     public String getOrderRef() {
         return orderRef;
-    }
-
-    @Override
-    public String getDtoEntityType() {
-        return "invoicedetails";
     }
 }
