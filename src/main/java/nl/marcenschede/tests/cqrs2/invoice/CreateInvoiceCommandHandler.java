@@ -4,13 +4,11 @@ import nl.marcenschede.tests.cqrs2.base.Bus;
 import nl.marcenschede.tests.cqrs2.base.Command;
 import nl.marcenschede.tests.cqrs2.base.CommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-@Component
-public class CreateCommandCommandHandler implements CommandHandler {
+public class CreateInvoiceCommandHandler implements CommandHandler {
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private InvoiceEventRepository invoiceRepository;
 
     @Override
     public void handle(Command cmd, Bus bus) {

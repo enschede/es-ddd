@@ -23,7 +23,7 @@ import java.util.function.Consumer;
 /**
  * Created by marc on 27/10/15.
  */
-public abstract class Repository<T extends AggregateRoot> {
+public abstract class EventRepository<T extends AggregateRoot> {
 
     static final boolean ELASTIC_SEARCH_REFRESH = true;
     static final String EVENT_TYPE_ID = "event";
@@ -37,15 +37,20 @@ public abstract class Repository<T extends AggregateRoot> {
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
 
+    @Autowired
+    private CqrsConfigurator cqrsConfigurator;
+
     public void storeEvent(T t) {
         UUID uuid = t.getUuid();
 
         t.getUncommittedChanges().stream().forEach(event -> {
-            storeEvent(event);
+            storeSingleEvent(event);
         });
+
+        t.markChangesAsCommitted();
     }
 
-    private void storeEvent(Event event) {
+    private void storeSingleEvent(Event event) {
         byte[] entityAsByteStream = new byte[0];
         try {
             entityAsByteStream = objectMapper.writeValueAsBytes(event);
@@ -53,7 +58,7 @@ public abstract class Repository<T extends AggregateRoot> {
             e.printStackTrace();
         }
 
-        client.prepareIndex(CqrsConfigurator.INDEX_NAME, EVENT_TYPE_ID).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
+        client.prepareIndex(cqrsConfigurator.getIndexName(), EVENT_TYPE_ID).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
 
     }
 
@@ -85,7 +90,7 @@ public abstract class Repository<T extends AggregateRoot> {
                 .setSize(100)
                 .execute().actionGet();
 
-        GetResponse response = client.prepareGet(CqrsConfigurator.INDEX_NAME, EVENT_TYPE_ID, uuid.toString()).get();
+        GetResponse response = client.prepareGet(cqrsConfigurator.getIndexName(), EVENT_TYPE_ID, uuid.toString()).get();
 
         List<Event> results = new ArrayList<>();
 
@@ -122,7 +127,7 @@ public abstract class Repository<T extends AggregateRoot> {
     public void deleteIndex() {
         DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest();
 
-        deleteIndexRequest.indices(CqrsConfigurator.INDEX_NAME);
+        deleteIndexRequest.indices(cqrsConfigurator.getIndexName());
 
         try {
             client.admin().indices().delete(deleteIndexRequest).get();
@@ -133,7 +138,6 @@ public abstract class Repository<T extends AggregateRoot> {
 
     public void storeDto(DtoObject t) {
         String type = t.getDtoEntityType();
-        String index = CqrsConfigurator.INDEX_NAME;
         byte[] entityAsByteStream = new byte[0];
         try {
             entityAsByteStream = objectMapper.writeValueAsBytes(t);
@@ -141,8 +145,7 @@ public abstract class Repository<T extends AggregateRoot> {
             e.printStackTrace();
         }
 
-        client.prepareIndex(index, type).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
+        client.prepareIndex(cqrsConfigurator.getIndexName(), type).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
     }
 
-    protected abstract String getAggregateIndex();
 }

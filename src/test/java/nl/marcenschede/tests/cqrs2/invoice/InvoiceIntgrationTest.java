@@ -23,7 +23,7 @@ public class InvoiceIntgrationTest {
     private Bus bus;
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private InvoiceEventRepository invoiceRepository;
 
     @Before
     public void before() throws ExecutionException, InterruptedException {
@@ -43,8 +43,9 @@ public class InvoiceIntgrationTest {
         Invoice actualInvoice = invoiceRepository.loadFromHistory(expectedUuid);
 
         assertThat(actualInvoice.getNaam(), Is.is("Marc Enschede"));
+        assertThat(actualInvoice.getOrderRef(), Is.is("Order12345"));
 
-        while(true);
+//        while(true);
     }
 
 

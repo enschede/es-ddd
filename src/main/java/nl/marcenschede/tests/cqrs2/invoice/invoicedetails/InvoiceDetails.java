@@ -1,4 +1,4 @@
-package nl.marcenschede.tests.cqrs2.invoice;
+package nl.marcenschede.tests.cqrs2.invoice.invoicedetails;
 
 import nl.marcenschede.tests.cqrs2.base.DtoObject;
 

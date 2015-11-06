@@ -47,5 +47,7 @@ public class Invoice extends AggregateRoot {
         applyChange(event, true);
     }
 
-
+    public String getOrderRef() {
+        return orderRef;
+    }
 }

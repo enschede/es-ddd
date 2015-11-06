@@ -1,6 +1,5 @@
 package nl.marcenschede.tests.cqrs2.base;
 
-import nl.marcenschede.tests.cqrs2.invoice.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,44 +10,29 @@ import java.util.List;
 public class Bus {
 
     @Autowired
-    private CreateCommandCommandHandler createCommandCommandHandler;
+    private CommandHandlerConfigurator commandHandlerConfigurator;
 
     @Autowired
-    private InvoiceSetNameCommandHandler invoiceSetNameCommandHandler;
-
-    @Autowired
-    private InvoiceCreatedEventHandler invoiceCreatedEventHandler;
+    private EventHandlerConfigurator eventHandlerConfigurator;
 
     private List<Event> scheduleEvents = new ArrayList<>();
 
     public void process(Command command) {
+        CommandHandler commandHandler = commandHandlerConfigurator.getCommandHandler(command);
 
-        if(command instanceof CreateInvoiceCommand) {
-            createCommandCommandHandler.handle(command, this);
-        }
-
-        if(command instanceof InvoiceSetNameCommand) {
-            invoiceSetNameCommandHandler.handle(command, this);
-        }
+        commandHandler.handle(command, this);
 
         processScheduledEvents();
     }
 
     private void processScheduledEvents() {
         scheduleEvents.stream().forEach(event -> processScheduledEvent(event));
-
         scheduleEvents.clear();
     }
 
     private void processScheduledEvent(Event event) {
-        if(event instanceof InvoiceCreatedEvent) {
-            invoiceCreatedEventHandler.process(event);
-        }
-
-        if(event instanceof InvoiceNameSetEvent) {
-
-        }
-
+        List<? extends EventHandler> eventHandlers = eventHandlerConfigurator.getEventHandler(event);
+        eventHandlers.stream().forEach(eventHandler -> eventHandler.process(event));
     }
 
     public void scheduleEventProcessing(List<Event> uncommittedChanges) {
