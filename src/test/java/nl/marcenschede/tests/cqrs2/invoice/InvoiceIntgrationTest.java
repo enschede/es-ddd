@@ -3,7 +3,6 @@ package nl.marcenschede.tests.cqrs2.invoice;
 import nl.marcenschede.tests.App;
 import nl.marcenschede.tests.cqrs2.base.Bus;
 import nl.marcenschede.tests.cqrs2.invoice.invoicedetails.InvoiceDetails;
-import nl.marcenschede.tests.elastic.base.repository.IdEqualsNullException;
 import org.hamcrest.Matchers;
 import org.junit.Before;
 import org.junit.Test;
@@ -38,7 +37,7 @@ public class InvoiceIntgrationTest {
     }
 
     @Test
-    public void shouldCreate() throws IOException, IdEqualsNullException {
+    public void shouldCreate() throws IOException {
         UUID expectedUuid = UUID.randomUUID();
 
         CreateInvoiceCommand command = new CreateInvoiceCommand(expectedUuid, "Marc", "Order12345");

@@ -2,10 +2,6 @@ package nl.marcenschede.tests.cqrs2.base;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import nl.marcenschede.tests.elastic.base.events.AggregateEvent;
-import nl.marcenschede.tests.elastic.base.events.AggregateEventType;
-import nl.marcenschede.tests.elastic.base.repository.IdEqualsNullException;
-import nl.marcenschede.tests.elastic.base.repository.IdNotNullException;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.client.Client;
@@ -49,7 +45,7 @@ public abstract class DtoRepository<T extends DtoObject> {
         client.prepareIndex(configurator.getIndexName(), type).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
     }
 
-    public void update(T t) throws IdEqualsNullException, IdNotNullException, JsonProcessingException {
+    public void update(T t) throws JsonProcessingException {
         String index = configurator.getIndexName();
 
         BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
@@ -78,7 +74,7 @@ public abstract class DtoRepository<T extends DtoObject> {
 
 
 
-    public Optional<T> findById(String id) throws IOException, IdEqualsNullException {
+    public Optional<T> findById(String id) throws IOException {
         Properties searchCriteria = new Properties();
         searchCriteria.setProperty("uuid", id);
 
@@ -87,7 +83,7 @@ public abstract class DtoRepository<T extends DtoObject> {
         return result.size()>0 ? Optional.of(result.get(0)) : Optional.empty();
     }
 
-    public List<T> findByCriteria(Properties searchCriteria) throws IOException, IdEqualsNullException {
+    public List<T> findByCriteria(Properties searchCriteria) throws IOException {
         String index = configurator.getIndexName();
 
         BoolQueryBuilder queryBuilder = new BoolQueryBuilder();
