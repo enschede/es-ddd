@@ -34,7 +34,7 @@ public class InvoiceIntgrationTest {
     public void shouldCreate() {
         UUID expectedUuid = UUID.randomUUID();
 
-        CreateInvoiceCommand command = new CreateInvoiceCommand(expectedUuid, "Marc");
+        CreateInvoiceCommand command = new CreateInvoiceCommand(expectedUuid, "Marc", "Order12345");
         bus.process(command);
 
         InvoiceSetNameCommand cmd2 = new InvoiceSetNameCommand(expectedUuid, "Marc Enschede");
@@ -44,7 +44,7 @@ public class InvoiceIntgrationTest {
 
         assertThat(actualInvoice.getNaam(), Is.is("Marc Enschede"));
 
-//        while(true);
+        while(true);
     }
 
 

@@ -1,5 +1,6 @@
 package nl.marcenschede.tests.cqrs2.invoice;
 
+import nl.marcenschede.tests.cqrs2.base.Bus;
 import nl.marcenschede.tests.cqrs2.base.Command;
 import nl.marcenschede.tests.cqrs2.base.CommandHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,10 @@ public class InvoiceSetNameCommandHandler implements CommandHandler {
     private InvoiceRepository invoiceRepository;
 
     @Override
-    public void handle(Command cmd) {
+    public void handle(Command cmd, Bus bus) {
             Invoice invoice = invoiceRepository.loadFromHistory(((InvoiceSetNameCommand) cmd).getUuid());
 
         invoice.setName(((InvoiceSetNameCommand)cmd).getName());
-        invoiceRepository.store(invoice);
+        invoiceRepository.storeEvent(invoice);
     }
 }

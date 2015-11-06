@@ -1,5 +1,7 @@
 package nl.marcenschede.tests.cqrs2.base;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +32,7 @@ public abstract class AggregateRoot {
         uncommittedChanges.clear();
     }
 
+    @JsonIgnore
     public List<Event> getUncommittedChanges() {
         return uncommittedChanges;
     }

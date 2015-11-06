@@ -37,7 +37,7 @@ public abstract class Repository<T extends AggregateRoot> {
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
 
-    public void store(T t) {
+    public void storeEvent(T t) {
         UUID uuid = t.getUuid();
 
         t.getUncommittedChanges().stream().forEach(event -> {
@@ -58,8 +58,6 @@ public abstract class Repository<T extends AggregateRoot> {
     }
 
     public T loadFromHistory(UUID uuid) {
-
-
         List<Event> events = loadEvents(uuid);
 
         T t = getEmptyObject(uuid);
@@ -70,6 +68,8 @@ public abstract class Repository<T extends AggregateRoot> {
                 t.applyChange(event, false);
             }
         });
+
+        beanFactory.autowireBean(t);
 
         return t;
     }
@@ -130,4 +130,19 @@ public abstract class Repository<T extends AggregateRoot> {
         }
 
     }
+
+    public void storeDto(DtoObject t) {
+        String type = t.getDtoEntityType();
+        String index = CqrsConfigurator.INDEX_NAME;
+        byte[] entityAsByteStream = new byte[0];
+        try {
+            entityAsByteStream = objectMapper.writeValueAsBytes(t);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+        client.prepareIndex(index, type).setSource(entityAsByteStream).setRefresh(ELASTIC_SEARCH_REFRESH).get();
+    }
+
+    protected abstract String getAggregateIndex();
 }

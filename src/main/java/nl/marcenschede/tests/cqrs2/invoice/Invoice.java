@@ -11,11 +11,12 @@ import java.util.UUID;
 public class Invoice extends AggregateRoot {
 
     private String naam;
+    private String orderRef;
 
-    public Invoice(UUID uuid, String naam) {
+    public Invoice(UUID uuid, String naam, String orderRef) {
         super(uuid);
 
-        InvoiceCreatedEvent invoiceCreatedEvent = new InvoiceCreatedEvent(uuid, naam);
+        InvoiceCreatedEvent invoiceCreatedEvent = new InvoiceCreatedEvent(uuid, naam, orderRef);
         applyChange(invoiceCreatedEvent, true);
     }
 
@@ -27,10 +28,11 @@ public class Invoice extends AggregateRoot {
     public void apply(Event event) {
         if(event instanceof InvoiceCreatedEvent) {
             this.naam = ((InvoiceCreatedEvent) event).getNaam();
+            this.orderRef = ((InvoiceCreatedEvent) event).getOrderRef();
         }
 
-        if(event instanceof InvoiceSetNameEvent) {
-            this.naam = ((InvoiceSetNameEvent) event).getNaam();
+        if(event instanceof InvoiceNameSetEvent) {
+            this.naam = ((InvoiceNameSetEvent) event).getNaam();
         }
 
 
@@ -41,7 +43,7 @@ public class Invoice extends AggregateRoot {
     }
 
     public void setName(String naam) {
-        Event event = new InvoiceSetNameEvent(getUuid(), naam);
+        Event event = new InvoiceNameSetEvent(getUuid(), naam);
         applyChange(event, true);
     }
 

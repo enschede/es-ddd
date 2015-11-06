@@ -5,5 +5,5 @@ package nl.marcenschede.tests.cqrs2.base;
  */
 public interface CommandHandler {
 
-    public void handle(Command cmd);
+    public void handle(Command cmd, Bus bus);
 }

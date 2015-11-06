@@ -11,4 +11,9 @@ public class InvoiceRepository extends Repository<Invoice> {
     protected Invoice getEmptyObject(UUID uuid) {
         return new Invoice(uuid);
     }
+
+    @Override
+    protected String getAggregateIndex() {
+        return "invoice";
+    }
 }

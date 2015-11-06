@@ -11,10 +11,12 @@ public class CreateInvoiceCommand implements Command {
 
     private UUID uuid;
     private String naam;
+    private String orderRef;
 
-    public CreateInvoiceCommand(UUID uuid, String naam) {
+    public CreateInvoiceCommand(UUID uuid, String naam, String orderRef) {
         this.uuid = uuid;
         this.naam = naam;
+        this.orderRef = orderRef;
     }
 
     public UUID getUuid() {
@@ -23,5 +25,13 @@ public class CreateInvoiceCommand implements Command {
 
     public String getNaam() {
         return naam;
+    }
+
+    public String getOrderRef() {
+        return orderRef;
+    }
+
+    public void setOrderRef(String orderRef) {
+        this.orderRef = orderRef;
     }
 }

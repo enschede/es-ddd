@@ -3,7 +3,7 @@ package nl.marcenschede.tests.cqrs2.base;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import nl.marcenschede.tests.cqrs2.invoice.InvoiceCreatedEvent;
-import nl.marcenschede.tests.cqrs2.invoice.InvoiceSetNameEvent;
+import nl.marcenschede.tests.cqrs2.invoice.InvoiceNameSetEvent;
 
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -17,7 +17,7 @@ import java.time.ZonedDateTime;
         property = "eventClass")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = InvoiceCreatedEvent.class, name = "InvoiceCreatedEvent"),
-        @JsonSubTypes.Type(value = InvoiceSetNameEvent.class, name = "InvoiceSetNameEvent")})
+        @JsonSubTypes.Type(value = InvoiceNameSetEvent.class, name = "InvoiceNameSetEvent")})
 public abstract class Event {
 
     private ZonedDateTime timestamp = ZonedDateTime.now(ZoneOffset.UTC);
