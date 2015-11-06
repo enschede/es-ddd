@@ -20,9 +20,9 @@ import java.time.ZonedDateTime;
         @JsonSubTypes.Type(value = InvoiceSetNameEvent.class, name = "InvoiceSetNameEvent")})
 public abstract class Event {
 
-    private ZonedDateTime utc = ZonedDateTime.now(ZoneOffset.UTC);
+    private ZonedDateTime timestamp = ZonedDateTime.now(ZoneOffset.UTC);
 
-    public ZonedDateTime getUtc() {
-        return utc;
+    public ZonedDateTime getTimestamp() {
+        return timestamp;
     }
 }
