@@ -3,6 +3,7 @@ package nl.marcenschede.tests.cqrs2.invoice;
 import nl.marcenschede.tests.App;
 import nl.marcenschede.tests.cqrs2.base.Bus;
 import org.hamcrest.core.Is;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import static org.junit.Assert.assertThat;
 
@@ -22,6 +24,11 @@ public class InvoiceIntgrationTest {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
+
+    @Before
+    public void before() throws ExecutionException, InterruptedException {
+        invoiceRepository.deleteIndex();
+    }
 
     @Test
     public void shouldCreate() {

@@ -2,6 +2,7 @@ package nl.marcenschede.tests.cqrs2.base;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.search.SearchType;
@@ -15,6 +16,7 @@ import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -110,10 +112,22 @@ public abstract class Repository<T extends AggregateRoot> {
             }
         }
 
-        Collections.sort(results, (o1, o2) -> o1.getUtc().compareTo(o2.getUtc()));
+        Collections.sort(results, (o1, o2) -> o1.getTimestamp().compareTo(o2.getTimestamp()));
 
         return results;
     }
 
     protected abstract T getEmptyObject(UUID uuid);
+
+    public void deleteIndex() {
+        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest();
+
+        deleteIndexRequest.indices(CqrsConfigurator.INDEX_NAME);
+
+        try {
+            client.admin().indices().delete(deleteIndexRequest).get();
+        } catch (ExecutionException | InterruptedException ee) {
+        }
+
+    }
 }
