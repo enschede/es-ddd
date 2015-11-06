@@ -15,6 +15,7 @@ public class InvoiceSetNameCommandHandler implements CommandHandler {
             Invoice invoice = invoiceRepository.loadFromHistory(((InvoiceSetNameCommand) cmd).getUuid());
 
         invoice.setName(((InvoiceSetNameCommand)cmd).getName());
+        bus.scheduleEventProcessing(invoice.getUncommittedChanges());
         invoiceRepository.storeEvent(invoice);
     }
 }

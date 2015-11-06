@@ -5,7 +5,6 @@ import nl.marcenschede.tests.cqrs2.base.Bus;
 import nl.marcenschede.tests.cqrs2.invoice.invoicedetails.InvoiceDetails;
 import nl.marcenschede.tests.elastic.base.repository.IdEqualsNullException;
 import org.hamcrest.Matchers;
-import org.hamcrest.core.Is;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
@@ -49,14 +49,14 @@ public class InvoiceIntgrationTest {
 
         Invoice actualInvoice = invoiceEventRepository.loadFromHistory(expectedUuid);
 
-        assertThat(actualInvoice.getNaam(), Is.is("Marc Enschede"));
-        assertThat(actualInvoice.getOrderRef(), Is.is("Order12345"));
+        assertThat(actualInvoice.getNaam(), Matchers.is("Marc Enschede"));
+        assertThat(actualInvoice.getOrderRef(), Matchers.is("Order12345"));
 
-        InvoiceDetails dtoInvoice = invoiceDtoRepository.findById(expectedUuid.toString());
+        Optional<InvoiceDetails> dtoInvoice = invoiceDtoRepository.findById(expectedUuid.toString());
 
-        assertThat(dtoInvoice.getNaam(), Matchers.is("Marc"));
+        assertThat(dtoInvoice.get().getNaam(), Matchers.is("Marc Enschede"));
 
-        while(true);
+//        while(true);
     }
 
 

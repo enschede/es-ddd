@@ -39,7 +39,7 @@ public class EventHandlerConfiguratorImpl implements EventHandlerConfigurator {
         eventHandlers.put(InvoiceCreatedEvent.class, Arrays.asList(invoiceCreatedEventHandler));
 
         InvoiceNameSetEventHandler invoiceNameSetEventHandler = new InvoiceNameSetEventHandler();
-        beanFactory.autowireBean(invoiceCreatedEventHandler);
+        beanFactory.autowireBean(invoiceNameSetEventHandler);
 
         eventHandlers.put(InvoiceNameSetEvent.class, Arrays.asList(invoiceNameSetEventHandler));
     }

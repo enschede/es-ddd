@@ -21,6 +21,7 @@ public class InvoiceDetails implements DtoObject {
         this.orderRef = orderRef;
     }
 
+    @Override
     public UUID getUuid() {
         return uuid;
     }
@@ -29,7 +30,15 @@ public class InvoiceDetails implements DtoObject {
         return naam;
     }
 
+    public void setNaam(String naam) {
+        this.naam = naam;
+    }
+
     public String getOrderRef() {
         return orderRef;
+    }
+
+    public void setOrderRef(String orderRef) {
+        this.orderRef = orderRef;
     }
 }
